@@ -19,8 +19,8 @@ import adodbapi
 conStr = "PROVIDER=SQLOLEDB;Data Source={0};Database={1}; \
        trusted_connection=yes;UID={2};PWD={3};".format("127.0.0.1","Exchange","exchange","exchange1")
 
-startBlock = 13366439
-currentBlock = 13366439
+startBlock = 13411695
+currentBlock = 13411695
 pollingPeriod = 20
 
 
@@ -84,7 +84,9 @@ def insertion(blockid, tr, IncomeWallets):
 
                 userId = IncomeWallets[1][index]
                 walletId = IncomeWallets[0][index]
-                z = cursor_MSSQL.callproc("CreateIncomeTransaction_UpdateBalance_CreateEvent", ("ETH", txhash, value, gas, fr, to, time, userId, walletId))
+                v = value / 1000000000000000000
+                g = gas / 1000000000000000000
+                z = cursor_MSSQL.callproc("CreateIncomeTransaction_UpdateBalance_CreateEvent", ("ETH", txhash, v, g, fr, to, time, userId, walletId))
                 conn_MSSQL.commit()
                 cursor_MSSQL.close()
                 conn_MSSQL.close()
