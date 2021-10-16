@@ -39,17 +39,15 @@ try:
     connMSSQL = adodbapi.connect(conStr)
     cursorMSSQL = connMSSQL.cursor()
 
-    cursorMSSQL.execute("SELECT * from Settings Where CurrencyAcronim = 'ETH'")
+    cursorMSSQL.execute("SELECT * from Settings Where Name = 'EthereumLastReadBlock'")
     settings = cursorMSSQL.fetchall()
     cursorMSSQL.close()
     connMSSQL.close()
 
-    startBlock = int(settings[0][1])
-    currentBlock = int(settings[0][1])
+    startBlock = int(settings[0][2])
+    currentBlock = int(settings[0][2])
 except:
     logger.error("Unable to connect to database MsSql or settings == null")
-    startBlock = 13411695
-    currentBlock = 13411695
 
 pollingPeriod = 20
 
@@ -130,7 +128,7 @@ while True:
             try:
                 connMSSQL = adodbapi.connect(conStr)
                 cursorMSSQL = connMSSQL.cursor()
-                cursorMSSQL.execute("UPDATE Settings SET CurrentBlock = {0} WHERE CurrencyAcronim = 'ETH'".format(currentBlock))
+                cursorMSSQL.execute("UPDATE Settings SET Value = {0} WHERE Name = 'EthereumLastReadBlock'".format(currentBlock))
                 connMSSQL.commit()
                 cursorMSSQL.close()
                 connMSSQL.close()
