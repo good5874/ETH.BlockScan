@@ -65,6 +65,9 @@ def insertion(blockid, tr, IncomeWallets):
         if (value == 0 and not inputinfo.startswith('0xa9059cbb')):
             continue
         fr = trans['from'].lower()
+
+        if trans.to is None:
+            continue
         to = trans['to'].lower()
         gasprice = trans['gasPrice']
         gas = web3.eth.getTransactionReceipt(trans['hash'])['gasUsed']
@@ -123,6 +126,8 @@ while True:
             transactions = web3.eth.getBlockTransactionCount(block)
             if transactions > 0:
                 insertion(block, transactions, IncomeWallets.ado_results)
+            else:
+                logger.debug('Block ' + str(block) + ' does not contain transactions')
             currentBlock = block
 
             try:
@@ -135,8 +140,7 @@ while True:
             except:
                 logger.error("Unable to connect to database MsSql")
         
-        else:
-            logger.debug('Block ' + str(block) + ' does not contain transactions')
+        
     except:
         logger.error("block does not exist")
 
